@@ -6,10 +6,9 @@ const bodyParser = require('body-parser');
 module.exports = (app) => {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(express.static(path.resolve(__basedir, 'static')));
-    app.engine('.hbs', handlebars({ extname: '.hbs' }));
+    app.engine('.hbs', handlebars({
+        extname: '.hbs',
+        // defaultLayout: false //- if true, the engine searches in this path: /views/layouts/main.hbs
+    }));
     app.set('views', path.resolve(__basedir, 'views'));
-
-    //TODO: Setup the view engine
-    //TODO: Setup the body parser
-    //TODO: Setup the static files
 };

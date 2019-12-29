@@ -9,7 +9,7 @@ class CubeModel {
 
     _write(newData, resolveData) {
         return new Promise((resolve, reject) => {
-            fs.writeFile(path.resolve('config/database.json'), JSON.stringify(newData), (err) => {
+            fs.writeFile(path.resolve('config/database.json'), JSON.stringify(newData, null, 2), (err) => {
                 if (err) {
                     reject(err);
                     return;
@@ -20,6 +20,10 @@ class CubeModel {
         });
     }
 
+    create(name, description, imgUrl, difficultyLevel) {
+        return { name, description, imgUrl, difficultyLevel }
+    }
+    
     getOne(id) {
         return Promise.resolve(this.data.entities.find(({ id: i }) => i === id));
     }
