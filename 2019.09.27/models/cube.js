@@ -23,7 +23,7 @@ class CubeModel {
     create(name, description, imgUrl, difficultyLevel) {
         return { name, description, imgUrl, difficultyLevel }
     }
-    
+
     getOne(id) {
         return this.find(({ id: i }) => i === id);
     }
@@ -65,7 +65,7 @@ class CubeModel {
         return this._write(newData, deletedEntity);
     }
 
-    find(predFn){
+    find(predFn) {
         return Promise.resolve(this.data.entities.filter(predFn));
     }
 }
