@@ -1,23 +1,45 @@
 const mongoose = require('mongoose');
 
 const cubeSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      // validate: {
-      //   validator: function (v) {
-      //     return /\d{3}-\d{3}-\d{4}/.test(v);
-      //   },
-      //   message: props => `${props.value} is not a valid phone number!`
-      // },
-    },
-    description: String,
-    imageUrl: String,
-    difficultyLevel: Number
-  });
-  
-  cubeSchema.methods.getDescription = function () {
-    return this.description;
-  };
-  
-  module.exports = mongoose.model('Cube', cubeSchema);
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+    // validate: {
+    //   validator: function (v) {
+    //     return v.length <= 1000;
+    //   },
+    //   message: props => `${props.value} must be maximum 1000 chars!`
+    // },
+  },
+  imageUrl: {
+    type: String,
+    required: true,
+    // validate: {
+    //   validator: function (v) {
+    //     return v.length <= 1000;
+    //   },
+    //   message: props => `${props.value} must be maximum 1000 chars!`
+    // },
+  },
+  difficultyLevel: {
+    type: Number,
+    required: true,
+    // validate: {
+    //   validator: function (v) {
+    //     return v.length <= 1000;
+    //   },
+    //   message: props => `${props.value} must be maximum 1000 chars!`
+    // },
+  },
+  accessories:[{ type: mongoose.Types.ObjectId, ref: 'Accessories' }],
+});
+
+// cubeSchema.methods.getDescription = function () {
+//   return this.description;
+// };
+
+module.exports = mongoose.model('Cube', cubeSchema);

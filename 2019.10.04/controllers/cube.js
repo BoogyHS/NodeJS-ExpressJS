@@ -1,17 +1,31 @@
-const cubeModel = require('../models/cube.js');
+const models = require('../models');
 
 function index(req, res, next) {
-    cubeModel.find()
+    const { from, to, search } = req.query;
+    let query = {};
+    if (search) {
+        query = { ...query, name: { $regex: search } };
+    }
+    if (to) {
+        query = { ...query, difficultyLevel: { $lte: +to } };
+    }
+    if (from) {
+        query = {
+            ...query,
+            difficultyLevel: { ...query.difficultyLevel, $gte: +from }
+        };
+    }
+    models.cubeModel.find(query)
         .then(cubes => {
-            res.render('index.hbs', { cubes });
+            res.render('index.hbs', { cubes, search, from, to });
         })
         .catch(next)
     // if in express.js this is set to true "defaultLayout: false", res.render will searh this path: /views/layouts/main.hbs
 }
 
 function details(req, res, next) {
-    const id = +req.params.id;
-    cubeModel.getOne(id)
+    const id = req.params.id;
+    models.cubeModel.findById(id).populate('accessories')
         .then(cube => {
             if (!cube) {
                 res.redirect('/not-found');
@@ -25,7 +39,7 @@ function details(req, res, next) {
 function postCreate(req, res) {
     const { name = null, description = null, imageUrl = null, difficultyLevel = null } = req.body;
 
-    cubeModel.create({ name, description, imageUrl, difficultyLevel })
+    models.cubeModel.create({ name, description, imageUrl, difficultyLevel })
         .then(insertedCube => {
             res.redirect('/');
         })
