@@ -6,6 +6,9 @@
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password">
+        {{#if message}}
+        <div class="error">{{message}}</div>
+        {{/if}}
         <input type="submit" value="Login">
     </form>
 </div>
