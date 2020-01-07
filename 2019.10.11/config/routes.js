@@ -1,8 +1,10 @@
 const cubeController = require('../controllers/cube.js');
 const accessoryController = require('../controllers/accessory.js');
 const authController = require('../controllers/auth.js');
+const { auth } = require('../utils');
 
 module.exports = (app) => {
+    app.get('/logout', authController.logout);
 
     app.get('/login', authController.login)
         .post('/login', authController.loginPost);
@@ -10,8 +12,8 @@ module.exports = (app) => {
     app.get('/register', authController.register)
         .post('/register', authController.registerPost);
 
-    app.get('/create/accessory', accessoryController.createGet)
-        .post('/create/accessory', accessoryController.createPost);
+    app.get('/create/accessory', auth(), accessoryController.createGet)
+        .post('/create/accessory', auth(), accessoryController.createPost);
 
     app.get('/attach/accessory/:id', accessoryController.attachGet)
         .post('/attach/accessory/:id', accessoryController.attachPost);
@@ -20,9 +22,9 @@ module.exports = (app) => {
     app.get('/details/:id', cubeController.details);
     app.get('/not-found', cubeController.notFound);
 
-    app.get('/create', cubeController.getCreate)
-        .post('/create', cubeController.postCreate);
-    app.get('/', cubeController.index);
+    app.get('/create', auth(), cubeController.getCreate)
+        .post('/create', auth(), cubeController.postCreate);
+    app.get('/', auth(false), cubeController.index);
 
     app.use('/', cubeController.notFound);
 };

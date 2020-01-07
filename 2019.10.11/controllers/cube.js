@@ -2,6 +2,7 @@ const models = require('../models');
 
 function index(req, res, next) {
     const { from, to, search } = req.query;
+    const user = req.user;
     let query = {};
     if (search) {
         query = { ...query, name: { $regex: search } };
@@ -17,7 +18,7 @@ function index(req, res, next) {
     }
     models.cubeModel.find(query)
         .then(cubes => {
-            res.render('index.hbs', { cubes, search, from, to });
+            res.render('index.hbs', { cubes, search, from, to, user });
         })
         .catch(next)
     // if in express.js this is set to true "defaultLayout: false", res.render will searh this path: /views/layouts/main.hbs

@@ -20,7 +20,7 @@ function loginPost(req, res, next) {
             const token = utils.jwt.createToken({ id: user._id });
             res.isLogged = true;
             res.cookie(appConfig.authCookieName, token)
-                res.redirect('/');
+            res.redirect('/');
         })
         .catch(next);
 
@@ -57,9 +57,19 @@ function registerPost(req, res, next) {
         });
 }
 
+function logout(req, res) {
+    const token = req.cookies[appConfig.authCookieName];
+    models.tokenBlacklistModel.create({ token })
+        .then(() => {
+            res.clearCookie(appConfig.authCookieName)
+                .redirect('/');
+        });
+}
+
 module.exports = {
     login,
     register,
     loginPost,
-    registerPost
+    registerPost,
+    logout
 }

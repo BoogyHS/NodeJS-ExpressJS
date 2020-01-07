@@ -2,27 +2,37 @@ const jwt = require('./jwt');
 const appConfig = require('../app-config');
 const models = require('../models');
 
-function auth(req, res, next) {
-    const token = req.cookies[appConfig.authCookieName] || '';
-    jwt.verifyToken(token)
-        .then(data => {
-            models.userModel.findById(data.id)
-                .then(user => {
-                    req.user = user;
+function auth(redirectUnauthenticated = true) {
+
+    return function (req, res, next) {
+        const token = req.cookies[appConfig.authCookieName] || '';
+        Promise.all([
+            jwt.verifyToken(token),
+            models.tokenBlacklistModel.findOne({ token })
+        ])
+            .then(([data, blacklistedToken]) => {
+                if (blacklistedToken) {
+                    return Promise.reject(new Error('blacklisted token'));
+                }
+                models.userModel.findById(data.id)
+                    .then(user => {
+                        req.user = user;
+                        next();
+                    })
+            })
+            .catch(err => {
+                if (!redirectUnauthenticated) {
                     next();
-                })
-        })
-        .catch(err => {
-            if (err.message==='token expired') {
-                console.error(err);
-                res.redirect('login.hbs');
-                return;
-            }
-            next(err);
-        });
+                    return;
+                }
+                if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
+                    console.error(err);
+                    res.redirect('/login');
+                    return;
+                }
+                next(err);
+            });
+    }
 }
 
-
-module.exports = {
-    auth
-}
+module.exports = auth;
