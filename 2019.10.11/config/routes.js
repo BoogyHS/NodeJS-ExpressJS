@@ -19,11 +19,18 @@ module.exports = (app) => {
         .post('/attach/accessory/:id', accessoryController.attachPost);
 
     app.get('/about', cubeController.about);
-    app.get('/details/:id', cubeController.details);
+    app.get('/details/:id', auth(false), cubeController.details);
     app.get('/not-found', cubeController.notFound);
 
     app.get('/create', auth(), cubeController.getCreate)
         .post('/create', auth(), cubeController.postCreate);
+
+    app.get('/edit/:id', auth(), cubeController.getEdit)
+        .post('/edit/:id', auth(), cubeController.postEdit);
+
+    app.get('/delete/:id', auth(), cubeController.getDelete)
+        .post('/delete/:id', auth(), cubeController.postDelete);
+
     app.get('/', auth(false), cubeController.index);
 
     app.use('/', cubeController.notFound);
