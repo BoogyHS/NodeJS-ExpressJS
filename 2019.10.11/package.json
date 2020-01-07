@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "main": "pathToMain",
     "scripts": {
-        "start": "nodemon ."
+        "start": "nodemon .",
+        "debug": "nodemon --inspect ."
     },
     "dependencies": {
         "bcrypt": "3.0.6",
