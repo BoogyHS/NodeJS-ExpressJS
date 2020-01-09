@@ -88,7 +88,8 @@ function getDelete(req, res, next) {
 function postDelete(req, res, next) {
     const id = req.params.id;
     const { user } = req;
-    models.cubeModel.findByIdAndDelete({ _id: id, creatorId: user._id })
+    // models.cubeModel.findByIdAndDelete({ _id: id, creatorId: user._id })
+    models.cubeModel.deleteOne({ _id: id, creatorId: user._id })
         .then(() => {
             res.redirect('/');
         })

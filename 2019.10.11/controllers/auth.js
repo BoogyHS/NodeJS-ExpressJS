@@ -10,7 +10,7 @@ function loginPost(req, res, next) {
     const { username, password } = req.body;
     models.userModel.findOne({ username })
         .then(user => {
-            return Promise.all([user, user.matchPassword(password)]);
+            return Promise.all([user, user ? user.matchPassword(password) : false]);
         })
         .then(([user, match]) => {
             if (!match) {
