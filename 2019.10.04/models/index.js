@@ -1,4 +1,4 @@
-const cubeModel = require('./Cube');
+const cubeModel = require('./Cube1');
 const accessoriesModel = require('./Accessory');
 
 module.exports = {
