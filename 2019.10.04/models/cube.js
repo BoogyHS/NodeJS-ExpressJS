@@ -28,12 +28,7 @@ const cubeSchema = new mongoose.Schema({
   difficultyLevel: {
     type: Number,
     required: true,
-    // validate: {
-    //   validator: function (v) {
-    //     return v.length <= 1000;
-    //   },
-    //   message: props => `${props.value} must be maximum 1000 chars!`
-    // },
+    
   },
   accessories:[{ type: mongoose.Types.ObjectId, ref: 'Accessories' }],
 });
