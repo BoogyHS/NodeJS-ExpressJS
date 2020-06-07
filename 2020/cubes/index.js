@@ -1,11 +1,19 @@
 global.__basedir = __dirname;
+const dbConnector = require('./config/db');
+const mongoose = require('mongoose');
 
-const env = process.env.NODE_ENV || 'development';
+dbConnector()
+    .then(() => {
+        const config = require('./config/config');
 
-const config = require('./config/config')[env];
-const app = require('express')();
+        const app = require('express')();
+        require('./config/express')(app);
+        require('./router/routes')(app);
+        app.use(function (err, req, res, next) {
+            res.render('500.hbs', { errorMessage: 'Something went wrong' });
+            console.log(err.message);
+        });
 
-require('./config/express')(app);
-require('./router/routes')(app);
-
-app.listen(config.port, console.log(`Listening on port ${config.port}! Now its up to you...`));
+        app.listen(config.port, console.log(`Listening on port ${config.port}!`));
+    })
+    .catch(console.error);
