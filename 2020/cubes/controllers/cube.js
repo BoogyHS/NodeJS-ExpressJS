@@ -18,9 +18,7 @@ function home(req, res, next) {
     }
     cubeModel.find(query)
         .then(cubes => {
-            console.log(cubes);
-
-            res.render('home.hbs', { cubes, search, from, to, user });
+            res.render('home', { cubes, search, from, to, user });
         })
         .catch(next)
 }
@@ -30,25 +28,36 @@ function about(req, res) {
 }
 
 function getCreate(req, res) {
-    res.render(`create.hbs`);
+    res.render(`create`);
+}
+
+function postCreate(req, res) {
+
+    const { name, description, imageUrl, difficultyLevel } = req.body;
+
+    cubeModel.create({ name, description, imageUrl, difficultyLevel })
+        .then(createdCube => {
+            res.redirect('/');
+        });
 }
 
 function getDetails(req, res) {
     const id = req.params.id;
-    
+
     cubeModel.findById(id)
-    // .populate('accessories')
-    .then(cube=>{
-        res.render(`details.hbs`, {cube});
-    })
-    .catch(e=>{
-        console.log(e)
-    })
+        // .populate('accessories')
+        .then(cube => {
+            res.render(`details.hbs`, { cube });
+        })
+        .catch(e => {
+            console.log(e)
+        })
 }
 
 module.exports = {
     home,
     about,
     getCreate,
+    postCreate,
     getDetails
 }
