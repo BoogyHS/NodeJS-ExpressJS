@@ -30,16 +30,15 @@ function getAttachAccessory(req, res) {
         }).catch(console.log);
 }
 
-function postAttachAccessory(req, res) {
+function postAttachAccessory(req, res, next) {
     const { id } = req.params;
     const { accessory: accessoryId } = req.body;
+
     Promise.all([
         cubeModel.updateOne({ _id: id }, { $push: { accessories: accessoryId } }),
         accessoryModel.updateOne({ _id: accessoryId }, { $push: { cubes: id } })
     ])
-        .then(() => {
-            res.redirect('/')
-        })
+        .then(() => { res.redirect('/') })
         .catch(next);
 }
 
