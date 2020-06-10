@@ -41,17 +41,15 @@ function postCreate(req, res) {
         });
 }
 
-function getDetails(req, res) {
+function getDetails(req, res, next) {
     const id = req.params.id;
 
     cubeModel.findById(id)
-        .populate('Accessories')
+        .populate('accessories')
         .then(cube => {
             res.render(`details`, { cube });
         })
-        .catch(e => {
-            console.log(e)
-        })
+        .catch(next)
 }
 
 module.exports = {

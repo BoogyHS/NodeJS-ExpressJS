@@ -29,6 +29,8 @@ function details(req, res, next) {
     const { user } = req;
     models.cubeModel.findById(id).populate('accessories')
         .then(cube => {
+            console.log(cube, 'here');
+            
             if (!cube) {
                 res.redirect('/not-found');
                 return;
