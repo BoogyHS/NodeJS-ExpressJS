@@ -15,6 +15,7 @@ module.exports = (app) => {
     app.post('/create/accessory', accessoryController.postCreateAccessory);
     
     app.get('/attach/accessory/:id', accessoryController.getAttachAccessory);
+    app.post('/attach/accessory/:id', accessoryController.postAttachAccessory);
 
     app.get('*', (req, res) => {
         res.render(`404.hbs`);

@@ -14,10 +14,10 @@ const accessorySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cubes: {
+    cubes: [{
         type: mongoose.Types.ObjectId,
         ref: 'Cube'
-    }
+    }]
 });
 
 module.exports = mongoose.model('Accessory', accessorySchema);

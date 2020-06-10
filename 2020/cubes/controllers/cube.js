@@ -45,7 +45,7 @@ function getDetails(req, res) {
     const id = req.params.id;
 
     cubeModel.findById(id)
-        // .populate('accessories')
+        .populate('Accessories')
         .then(cube => {
             res.render(`details`, { cube });
         })
