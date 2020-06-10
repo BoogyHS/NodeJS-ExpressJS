@@ -47,7 +47,7 @@ function getDetails(req, res) {
     cubeModel.findById(id)
         // .populate('accessories')
         .then(cube => {
-            res.render(`details.hbs`, { cube });
+            res.render(`details`, { cube });
         })
         .catch(e => {
             console.log(e)
@@ -59,5 +59,5 @@ module.exports = {
     about,
     getCreate,
     postCreate,
-    getDetails
+    getDetails,
 }

@@ -10,12 +10,12 @@ const accessorySchema = new mongoose.Schema({
         required: true,
         max: 1000
     },
-    imageUrl: {
+    image: {
         type: String,
         required: true,
     },
     cubes: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'Cube'
     }
 });

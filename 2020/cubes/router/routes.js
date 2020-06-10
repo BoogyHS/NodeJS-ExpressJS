@@ -1,4 +1,4 @@
-const { cubeController } = require('../controllers')
+const { cubeController, accessoryController } = require('../controllers')
 
 module.exports = (app) => {
     app.get('/', cubeController.home);
@@ -10,6 +10,11 @@ module.exports = (app) => {
     app.post('/create', cubeController.postCreate);
 
     app.get('/details/:id', cubeController.getDetails);
+
+    app.get('/create/accessory', accessoryController.getCreateAccessory);
+    app.post('/create/accessory', accessoryController.postCreateAccessory);
+    
+    app.get('/attach/accessory/:id', accessoryController.getAttachAccessory);
 
     app.get('*', (req, res) => {
         res.render(`404.hbs`);
