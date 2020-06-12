@@ -5,8 +5,8 @@ const {
     authController } = require('../controllers');
 
 module.exports = (app) => {
-    app.get('/', cubeController.home);
-    app.get('/home', cubeController.home);
+    app.get('/', auth(false), cubeController.home);
+    app.get('/home', auth(false), cubeController.home);
 
     app.get('/about', cubeController.about);
 
@@ -20,8 +20,14 @@ module.exports = (app) => {
 
     app.get('/create', auth(), cubeController.getCreate);
     app.post('/create', auth(), cubeController.postCreate);
+   
+    app.get('/edit/:id', auth(), cubeController.getEdit);
+    app.post('/edit/:id', auth(), cubeController.postEdit);
+    
+    app.get('/delete/:id', auth(), cubeController.getDelete);
+    app.post('/delete/:id', auth(), cubeController.postDelete);
 
-    app.get('/details/:id', cubeController.getDetails);
+    app.get('/details/:id', auth(false), cubeController.getDetails);
 
     app.get('/create/accessory', auth(), accessoryController.getCreateAccessory);
     app.post('/create/accessory', auth(), accessoryController.postCreateAccessory);

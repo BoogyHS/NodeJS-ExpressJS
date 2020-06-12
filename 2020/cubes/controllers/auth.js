@@ -23,7 +23,7 @@ function postLogin(req, res, next) {
             }
             const token = utils.jwt.createToken({ id: user._id });
             res.isLogged = true;
-            res.cookie(appConfig.authCookieName, token)
+            res.cookie(authCookieName, token)
             res.redirect('/');
         })
         .catch(next);
