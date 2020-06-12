@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const tokenBlacklistShema = new mongoose.Schema({
-    tocken: String,
+    tocen: String,
 });
 
 
-module.exports = mongoose.model('TockenBlacklist', tokenBlacklistShema);
+module.exports = mongoose.model('TocenBlacklist', tokenBlacklistShema);

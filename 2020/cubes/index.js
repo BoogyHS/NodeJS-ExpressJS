@@ -9,6 +9,7 @@ dbConnector()
         const app = require('express')();
         require('./config/express')(app);
         require('./router/routes')(app);
+        
         app.use(function (err, req, res, next) {
             res.render('500.hbs', { errorMessage: 'Something went wrong' });
             console.log(err.message);
