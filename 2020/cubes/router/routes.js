@@ -8,7 +8,8 @@ module.exports = (app) => {
     app.get('/', auth(false), cubeController.home);
     app.get('/home', auth(false), cubeController.home);
 
-    app.get('/about', cubeController.about);
+    app.get('/about', auth(false), cubeController.about);
+
 
     app.get('/login', authController.login);
     app.post('/login', authController.postLogin);

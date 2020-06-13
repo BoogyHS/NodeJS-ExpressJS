@@ -2,7 +2,8 @@ const { cubeModel } = require('../models');
 
 function home(req, res, next) {
     const { from, to, search } = req.query;
-    const { user } = req;
+    const { user, isLogged } = req;
+
     let query = {};
     if (search) {
         query = { ...query, name: { $regex: search } };
@@ -18,17 +19,20 @@ function home(req, res, next) {
     }
     cubeModel.find(query)
         .then(cubes => {
-            res.render('home', { cubes, search, from, to, user });
+            res.render('home', { cubes, search, from, to, user, isLogged });
         })
         .catch(next)
 }
 
-function about(req, res) {
-    res.render(`about`);
+function about(req, res, next) {
+    const { user, isLogged } = req;
+
+    res.render(`about`, { user, isLogged });
 }
 
 function getCreate(req, res) {
-    res.render(`create`);
+    const { user, isLogged } = req;
+    res.render(`create`, { user, isLogged });
 }
 
 function postCreate(req, res) {
@@ -44,7 +48,7 @@ function postCreate(req, res) {
 
 function getEdit(req, res) {
     const id = req.params.id;
-    const { user } = req;
+    const { user, isLogged } = req;
     cubeModel.findOne({ _id: id, })
         .then(cube => {
             const options = [
@@ -55,7 +59,7 @@ function getEdit(req, res) {
                 { title: '5 - Expert', selected: 5 === cube.difficultyLevel, value: 5 },
                 { title: '6 - Hardcore', selected: 6 === cube.difficultyLevel, value: 6 },
             ]
-            res.render('edit', { cube, options });
+            res.render('edit', { cube, options, user, isLogged });
         })
         .catch(console.error)
 }
@@ -73,7 +77,7 @@ function postEdit(req, res) {
 
 function getDetails(req, res, next) {
     const id = req.params.id;
-    const { user } = req;
+    const { user, isLogged } = req;
     let isCreator = false;
 
     cubeModel.findById(id)
@@ -85,14 +89,14 @@ function getDetails(req, res, next) {
                     isCreator = true;
                 }
             }
-            res.render(`details`, { cube, isCreator });
+            res.render(`details`, { cube, isCreator, user, isLogged });
         })
         .catch(next)
 }
 
 function getDelete(req, res, next) {
     const id = req.params.id;
-    const { user } = req;
+    const { user, isLogged } = req;
     //todo if cube don't exist
     cubeModel.findOne({ _id: id, creatorId: user._id })
         .then(cube => {
@@ -104,7 +108,7 @@ function getDelete(req, res, next) {
                 { title: '5 - Expert', selected: 5 === cube.difficultyLevel, value: 5 },
                 { title: '6 - Hardcore', selected: 6 === cube.difficultyLevel, value: 6 },
             ]
-            res.render('delete', { cube, options });
+            res.render('delete', { cube, options, isLogged });
         })
         .catch(next)
 }

@@ -14,12 +14,14 @@ function auth(redirectUnauthenticated = true) {
             tokenBlacklistModel.findOne({ token })
         ])
             .then(([data, blacklistedToken]) => {
+                console.log('here');
                 if (blacklistedToken) {
                     return Promise.reject(new Error('blacklisted token'));
                 }
                 userModel.findById(data.id)
                     .then(user => {
                         req.user = user;
+                        req.isLogged = true;
                         next();
                     })
             })

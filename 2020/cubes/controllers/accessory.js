@@ -1,7 +1,9 @@
 const { accessoryModel, cubeModel } = require('../models');
 
 function getCreateAccessory(req, res) {
-    res.render('createAccessory');
+    const { user, isLogged } = req;
+
+    res.render('createAccessory', {isLogged});
 }
 
 function postCreateAccessory(req, res) {
@@ -14,6 +16,7 @@ function postCreateAccessory(req, res) {
 
 function getAttachAccessory(req, res) {
     const { id: cubeId } = req.params;
+    const { user, isLogged } = req;
     cubeModel
         .findById(cubeId)
         .then(cube => {
@@ -25,7 +28,9 @@ function getAttachAccessory(req, res) {
         .then(([cube, filterAccessories]) => {
             res.render('attachAccessory', {
                 cube,
-                accessories: filterAccessories.length > 0 ? filterAccessories : null
+                accessories: filterAccessories.length > 0 ? filterAccessories : null,
+                user,
+                isLogged
             });
         }).catch(console.log);
 }
