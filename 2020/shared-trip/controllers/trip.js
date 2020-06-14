@@ -1,25 +1,29 @@
 const { cubeModel } = require('../models');
 
 function home(req, res, next) {
-    const { from, to, search } = req.query;
+    // const { from, to, search } = req.query;
     const { user, isLogged } = req;
 
     let query = {};
-    if (search) {
-        query = { ...query, name: { $regex: search } };
-    }
-    if (to) {
-        query = { ...query, difficultyLevel: { $lte: +to } };
-    }
-    if (from) {
-        query = {
-            ...query,
-            difficultyLevel: { ...query.difficultyLevel, $gte: +from }
-        };
-    }
+    // if (search) {
+    //     query = { ...query, name: { $regex: search } };
+    // }
+    // if (to) {
+    //     query = { ...query, difficultyLevel: { $lte: +to } };
+    // }
+    // if (from) {
+    //     query = {
+    //         ...query,
+    //         difficultyLevel: { ...query.difficultyLevel, $gte: +from }
+    //     };
+    // }
     cubeModel.find(query)
         .then(cubes => {
-            res.render('home', { cubes, search, from, to, user, isLogged });
+            res.render('home', 
+            { 
+                // cubes, search, from, to, user, 
+                isLogged }
+            );
         })
         .catch(next)
 }
