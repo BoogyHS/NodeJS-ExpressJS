@@ -1,9 +1,9 @@
-const cubeModel = require('./Trip');
+const tripModel = require('./Trip');
 const userModel = require('./User');
 const tokenBlacklistModel = require('./token-blacklist');
 
 module.exports = {
-    cubeModel,
+    tripModel,
     userModel,
     tokenBlacklistModel
 }

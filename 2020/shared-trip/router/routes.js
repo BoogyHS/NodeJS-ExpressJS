@@ -19,16 +19,18 @@ module.exports = (app) => {
 
     app.get('/logout', authController.logout);
 
-    // app.get('/create', auth(), cubeController.getCreate);
-    // app.post('/create', auth(), cubeController.postCreate);
+    app.get('/shared-trips', tripController.getSharedTrips);
+
+    app.get('/create', auth(), tripController.getCreate);
+    app.post('/create', auth(), tripController.postCreate);
    
     // app.get('/edit/:id', auth(), cubeController.getEdit);
     // app.post('/edit/:id', auth(), cubeController.postEdit);
     
-    // app.get('/delete/:id', auth(), cubeController.getDelete);
-    // app.post('/delete/:id', auth(), cubeController.postDelete);
+    app.get('/delete/:id', auth(), tripController.getDelete);
+    // app.post('/delete/:id', auth(), tripController.postDelete);
 
-    // app.get('/details/:id', auth(false), cubeController.getDetails);
+    app.get('/details/:id', auth(), tripController.getDetails);
 
     // app.get('/create/accessory', auth(), accessoryController.getCreateAccessory);
     // app.post('/create/accessory', auth(), accessoryController.postCreateAccessory);

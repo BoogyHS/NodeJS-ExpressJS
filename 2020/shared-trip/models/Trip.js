@@ -29,6 +29,12 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    buddies :[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     creatorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

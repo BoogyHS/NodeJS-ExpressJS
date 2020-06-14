@@ -1,29 +1,17 @@
-const { cubeModel } = require('../models');
+const { tripModel } = require('../models');
 
 function home(req, res, next) {
-    // const { from, to, search } = req.query;
     const { user, isLogged } = req;
 
-    let query = {};
-    // if (search) {
-    //     query = { ...query, name: { $regex: search } };
-    // }
-    // if (to) {
-    //     query = { ...query, difficultyLevel: { $lte: +to } };
-    // }
-    // if (from) {
-    //     query = {
-    //         ...query,
-    //         difficultyLevel: { ...query.difficultyLevel, $gte: +from }
-    //     };
-    // }
-    cubeModel.find(query)
-        .then(cubes => {
-            res.render('home', 
-            { 
-                // cubes, search, from, to, user, 
-                isLogged }
-            );
+    res.render('home', { user, isLogged });
+}
+
+function getSharedTrips(req, res, next) {
+    const { user, isLogged } = req;
+
+    tripModel.find()
+        .then(trips => {
+            res.render('sharedTrips', { trips, user, isLogged });
         })
         .catch(next)
 }
@@ -41,12 +29,16 @@ function getCreate(req, res) {
 
 function postCreate(req, res, next) {
 
-    const { name, description, imageUrl, difficultyLevel } = req.body;
+    const { startend, datetime, description, carImage, seats } = req.body;
     const { user } = req;
+    const startPoint = startend.split('-')[0].trim();
+    const endPoint = startend.split('-')[1].trim();
+    const date = datetime.split('-')[0].trim();
+    const time = datetime.split('-')[1].trim();
 
-    cubeModel.create({ name, description, imageUrl, difficultyLevel, creatorId: user._id })
-        .then(createdCube => {
-            res.redirect('/');
+    tripModel.create({ startPoint, endPoint, date, time, description, carImage, seats, creatorId: user._id })
+        .then(createdTrip => {
+            res.redirect('/shared-trips');
         })
         .catch(next);
 }
@@ -85,51 +77,52 @@ function getDetails(req, res, next) {
     const { user, isLogged } = req;
     let isCreator = false;
 
-    cubeModel.findById(id)
-        .populate('accessories')
+    tripModel.findById(id)
+        // .populate('accessories')
         .populate('creatorId')
-        .then(cube => {
-            if (cube.creatorId) {
-                if (cube.creatorId._id.toString() === user._id.toString()) {
+        .then(trip => {
+            if (trip.creatorId) {
+                if (trip.creatorId._id.toString() === user._id.toString()) {
                     isCreator = true;
                 }
             }
-            res.render(`details`, { cube, isCreator, user, isLogged });
+            res.render(`details`, { trip, isCreator, user, isLogged });
         })
         .catch(next)
 }
+
+// function getDelete(req, res, next) {
+//     const id = req.params.id;
+//     const { user, isLogged } = req;
+//     //todo if cube don't exist
+//     cubeModel.findOne({ _id: id, creatorId: user._id })
+//         .then(cube => {
+//             const options = [
+//                 { title: '1 - Very Easy', selected: 1 === cube.difficultyLevel, value: 1 },
+//                 { title: '2 - Easy', selected: 2 === cube.difficultyLevel, value: 2 },
+//                 { title: '3 - Medium (Standard 3x3)', selected: 3 === cube.difficultyLevel, value: 3 },
+//                 { title: '4 - Intermediate', selected: 4 === cube.difficultyLevel, value: 4 },
+//                 { title: '5 - Expert', selected: 5 === cube.difficultyLevel, value: 5 },
+//                 { title: '6 - Hardcore', selected: 6 === cube.difficultyLevel, value: 6 },
+//             ]
+//             res.render('delete', { cube, options, isLogged });
+//         })
+//         .catch(next)
+// }
 
 function getDelete(req, res, next) {
     const id = req.params.id;
-    const { user, isLogged } = req;
-    //todo if cube don't exist
-    cubeModel.findOne({ _id: id, creatorId: user._id })
-        .then(cube => {
-            const options = [
-                { title: '1 - Very Easy', selected: 1 === cube.difficultyLevel, value: 1 },
-                { title: '2 - Easy', selected: 2 === cube.difficultyLevel, value: 2 },
-                { title: '3 - Medium (Standard 3x3)', selected: 3 === cube.difficultyLevel, value: 3 },
-                { title: '4 - Intermediate', selected: 4 === cube.difficultyLevel, value: 4 },
-                { title: '5 - Expert', selected: 5 === cube.difficultyLevel, value: 5 },
-                { title: '6 - Hardcore', selected: 6 === cube.difficultyLevel, value: 6 },
-            ]
-            res.render('delete', { cube, options, isLogged });
-        })
-        .catch(next)
-}
-
-function postDelete(req, res, next) {
-    const id = req.params.id;
     const { user } = req;
     // models.cubeModel.findByIdAndDelete({ _id: id, creatorId: user._id })
-    models.cubeModel.deleteOne({ _id: id, creatorId: user._id })
+    tripModel.deleteOne({ _id: id, creatorId: user._id })
         .then(() => {
-            res.redirect('/');
+            res.redirect('/shared-trips');
         })
 }
 
 module.exports = {
     home,
+    getSharedTrips,
     about,
     getCreate,
     postCreate,
@@ -137,5 +130,4 @@ module.exports = {
     getEdit,
     postEdit,
     getDelete,
-    postDelete
 }
