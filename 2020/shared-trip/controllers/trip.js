@@ -1,4 +1,4 @@
-const { tripModel } = require('../models');
+const { tripModel, userModel } = require('../models');
 
 function home(req, res, next) {
     const { user, isLogged } = req;
@@ -43,42 +43,37 @@ function postCreate(req, res, next) {
         .catch(next);
 }
 
-function getEdit(req, res) {
+function getEdit(req, res, next) {
     const id = req.params.id;
     const { user, isLogged } = req;
-    cubeModel.findOne({ _id: id, })
-        .then(cube => {
-            const options = [
-                { title: '1 - Very Easy', selected: 1 === cube.difficultyLevel, value: 1 },
-                { title: '2 - Easy', selected: 2 === cube.difficultyLevel, value: 2 },
-                { title: '3 - Medium (Standard 3x3)', selected: 3 === cube.difficultyLevel, value: 3 },
-                { title: '4 - Intermediate', selected: 4 === cube.difficultyLevel, value: 4 },
-                { title: '5 - Expert', selected: 5 === cube.difficultyLevel, value: 5 },
-                { title: '6 - Hardcore', selected: 6 === cube.difficultyLevel, value: 6 },
-            ]
-            res.render('edit', { cube, options, user, isLogged });
+
+    tripModel.updateOne({ _id: id }, { $push: { buddies: user._id } })
+        .then(updatedTrip => {
+            res.redirect('/shared-trips');
         })
-        .catch(console.error)
+        .catch(next)
 }
 
-function postEdit(req, res) {
-    const id = req.params.id;
-    const { name, description, imageUrl, difficultyLevel } = req.body;
-    const { user } = req;
+// function postEdit(req, res) {
+//     const id = req.params.id;
+//     const { name, description, imageUrl, difficultyLevel } = req.body;
+//     const { user } = req;
 
-    cubeModel.updateOne({ _id: id }, { name, description, imageUrl, difficultyLevel, creatorId: user._id })
-        .then(updatedCube => {
-            res.redirect('/');
-        });
-}
+//     cubeModel.updateOne({ _id: id }, { name, description, imageUrl, difficultyLevel, creatorId: user._id })
+//         .then(updatedCube => {
+//             res.redirect('/');
+//         });
+// }
 
 function getDetails(req, res, next) {
     const id = req.params.id;
     const { user, isLogged } = req;
     let isCreator = false;
+    let isJoined = false;
+    let isFreeSpace = false;
 
     tripModel.findById(id)
-        // .populate('accessories')
+        .populate('buddies')
         .populate('creatorId')
         .then(trip => {
             if (trip.creatorId) {
@@ -86,7 +81,23 @@ function getDetails(req, res, next) {
                     isCreator = true;
                 }
             }
-            res.render(`details`, { trip, isCreator, user, isLogged });
+            if (trip.buddies) {
+                if (trip.buddies.length < trip.seats) {
+                    isFreeSpace = true;
+                }
+
+                // console.log(trip.buddies)
+                // userModel.countDocuments({ _id: user._id }, function (err, count) {
+                //     if (count > 0) {
+                //         isJoined=true
+                //     }
+                // })
+                // .then(()=>{
+                //     res.render(`details`, { trip, isCreator, user, isLogged, isJoined, isFreeSpace });
+                //     return
+                // });
+            }
+            res.render(`details`, { trip, isCreator, user, isLogged, isJoined, isFreeSpace });
         })
         .catch(next)
 }
@@ -128,6 +139,5 @@ module.exports = {
     postCreate,
     getDetails,
     getEdit,
-    postEdit,
     getDelete,
 }

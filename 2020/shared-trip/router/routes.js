@@ -24,7 +24,7 @@ module.exports = (app) => {
     app.get('/create', auth(), tripController.getCreate);
     app.post('/create', auth(), tripController.postCreate);
    
-    // app.get('/edit/:id', auth(), cubeController.getEdit);
+    app.get('/edit/:id', auth(), tripController.getEdit);
     // app.post('/edit/:id', auth(), cubeController.postEdit);
     
     app.get('/delete/:id', auth(), tripController.getDelete);
