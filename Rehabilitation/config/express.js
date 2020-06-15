@@ -10,8 +10,8 @@ module.exports = (app) => {
     app.use(cookieParser(secret));
     
     app.engine('.hbs', handlebars({ extname: '.hbs' }));
-    
-    app.set('view engine', '.hbs');
 
+    app.set('view engine', '.hbs');
+    
     app.use(express.static(path.resolve(__basedir, 'static')));
 };
