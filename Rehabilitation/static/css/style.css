@@ -1,0 +1,110 @@
+@import url('reset.css');
+@import url('layout.css');
+@import url('typography.css');
+body {
+    max-width: 1366px;
+    margin: auto;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* header */
+
+header {
+    background: rgb(0, 128, 182);
+    background: linear-gradient(0deg, rgba(0, 128, 182, 1) 0%, rgba(0, 128, 182, 1) 35%, rgba(0, 212, 255, 1) 100%);
+}
+
+header nav {
+    padding: 1em;
+    padding-bottom: 0;
+    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+header img {
+    width: 30%;
+    height: 100%;
+}
+
+header ul {
+    width: 68%;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+header li {
+    display: inline-block;
+    border: 1px solid rgba(0, 212, 255, 1);
+    border-radius: 0.3em;
+    padding: 0.5em 1.2em;
+    margin: 0.5em;
+}
+
+header a {
+    font-size: 1.1em;
+    color: white;
+    text-decoration: none;
+}
+
+/* main  */
+
+.wrapper {
+    margin-top: 1em;
+    display: flex;
+    padding: 1em;
+}
+
+main {
+    flex-basis: 70%;
+}
+
+aside {
+    flex-basis: 30%;
+    margin-right: 1em;
+    padding-right: 1em;
+}
+
+aside ul {
+    border: 1px solid;
+    border-radius: 0.3em;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+aside li {
+    list-style: none;
+    background-color: rgb(234, 242, 253);
+    padding: 0.5em;
+}
+
+aside li+li {
+    border-top: 1px solid rgb(197, 214, 237);
+}
+
+aside a {
+    text-decoration: none;
+}
+
+/* footer  */
+
+footer {
+    background: linear-gradient(180deg, rgba(0, 128, 182, 1) 0%, rgba(0, 128, 182, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    margin-top: 1em;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    max-width: 1366px;
+}
+
+footer p {
+    margin: 0;
+    padding: 0;
+    font-size: 1.1em;
+    text-align: center;
+}
