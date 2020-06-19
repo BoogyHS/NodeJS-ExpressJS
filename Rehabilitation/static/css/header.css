@@ -1,0 +1,41 @@
+header {
+    background: rgb(0, 128, 182);
+    background: linear-gradient(0deg, rgba(0, 128, 182, 1) 0%, rgba(0, 128, 182, 1) 35%, rgba(0, 212, 255, 1) 100%);
+}
+
+header nav {
+    padding: 1em;
+    padding-bottom: 0;
+    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+header img {
+    width: 30%;
+    height: 100%;
+}
+
+header ul {
+    width: 68%;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+header li {
+    display: inline-block;
+    border: 1px solid rgba(0, 212, 255, 1);
+    border-radius: 0.3em;
+    padding: 0.5em 1.2em;
+    margin: 0.5em;
+}
+
+header a {
+    font-size: 1.1em;
+    color: white;
+    text-decoration: none;
+}
